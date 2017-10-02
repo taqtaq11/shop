@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Shop | Catalog</title>
+</head>
+<body>
+    <div data-th-include="fragments/header" data-th-remove="tag"></div>
+    <div data-th-include="fragments/menu" data-th-remove="tag"></div>
+    <div data-th-include="fragments/cart_widget" data-th-remove="tag"></div>
+
+    <div class="catalog-content">
+        <div class="categories-nav">
+            <span data-th-each="category: ${categoriesPath}">
+                <a data-th-href="@{'/catalog/' + ${category.id}}" data-th-text="${category.name}"></a> >
+            </span>
+        </div>
+        <div class="subcategories-list">
+            <span data-th-each="subCategory: ${subCategories}">
+                <a data-th-href="@{'/catalog/' + ${subCategory.id}}" data-th-text="${subCategory.name}"></a>
+            </span>
+        </div>
+        <div class="products-list">
+            <div class="product" data-th-each="product: ${products}">
+                <img class="product_image" data-th-src="@{'/images/' + ${product.imageUrl}}" alt="" />
+                <span class="product_name" data-th-text="${product.name}"></span>
+                <div class="product_description" data-th-text="${product.description}"></div>
+                <span class="product_price" data-th-text="${product.price}"></span>
+                <div class="product_buy_controls">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-th-include="fragments/footer" data-th-remove="tag"></div>
+</body>
+</html>
