@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.main-wrapper {
+    width: 60%;
+    margin: 0 auto;
+}

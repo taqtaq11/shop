@@ -27,9 +27,15 @@ public class CatalogController {
     private final ProductsRepository productsRepository;
 
     @Autowired
-    public CatalogController(CategoriesRepository categoriesRepository, ProductsRepository productsRepository) {
+    public CatalogController(CategoriesRepository categoriesRepository,
+                             ProductsRepository productsRepository) {
         this.categoriesRepository = categoriesRepository;
         this.productsRepository = productsRepository;
+    }
+
+    @RequestMapping("/catalog")
+    public String redirect() {
+        return "redirect:/catalog/1";
     }
 
     @RequestMapping("/catalog/{category_id}")
@@ -40,8 +46,8 @@ public class CatalogController {
             Integer pageNum,
             Model model) {
 
-        if (categoryId == null) {
-            categoryId = 1;
+        if (categoryId == null || categoryId < 1) {
+            return "redirect:/catalog/1";
         }
 
         if (pageNum == null) {
@@ -49,6 +55,10 @@ public class CatalogController {
         }
 
         Category currentCategory = categoriesRepository.findOne(categoryId);
+
+        if (currentCategory == null) {
+            return "redirect:/catalog/1";
+        }
 
         List<Category> categoriesPath = getCategoriesPath(currentCategory);
         List<Category> subCategories = getSubCategories(currentCategory.getId());

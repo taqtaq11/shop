@@ -1,0 +1,7 @@
+.cart-widget.hide {
+    display: none;
+}
+
+.cart-widget.show {
+    display: block;
+}

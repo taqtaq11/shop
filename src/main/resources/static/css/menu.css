@@ -1,0 +1,30 @@
+.menu {
+    height: 60px;
+    background-color: #3F51B5;
+}
+
+.menu .menu-item {
+    display: inline-block;
+    height: 60px;
+    width: 18%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.menu .menu-item a {
+    display: table-cell;
+    width: 500px;
+    height: 60px;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    vertical-align: middle;
+    color: #E8EAF6;
+    background-color: #3F51B5;
+}
+
+.menu .menu-item a:hover {
+    background-color: #8C9EFF;
+    color: #3949AB;
+}
