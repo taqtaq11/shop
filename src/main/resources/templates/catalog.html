@@ -35,9 +35,11 @@
                     <span class="product price" data-th-text="${product.price}"></span>
                     <div class="product buy-controls">
                         <div class="wrapper">
-                            <div class="buy-control minus">-</div>
+                            <button class="buy-control minus"
+                                    data-th-attr="product-name=@{${product.name}}">-</button>
                             <input class="buy-control text" type="text" />
-                            <div class="buy-control plus">+</div>
+                            <button class="buy-control plus"
+                                    data-th-attr="product-name=@{${product.name}}">+</button>
                         </div>
                     </div>
                 </div>
@@ -46,5 +48,9 @@
 
         <div data-th-include="fragments/footer" data-th-remove="tag"></div>
     </div>
+
+    <script src="/js/jquery-3.2.1.min.js" />
+    <script src="/js/cart-widget.js" />
+    <script src="/js/catalog.js" />
 </body>
 </html>

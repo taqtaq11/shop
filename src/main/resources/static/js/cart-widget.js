@@ -10,56 +10,100 @@ var cartWidget = {};
         this.elem = $('.cart-widget');
 
         if (localStorage !== null && localStorage !== undefined) {
-            var savedProducts = localStorage.getItem(productsStorageKey);
+            var savedProducts = getProductsFromLocalStorage();
 
-            if (savedProducts === null) {
-                savedProducts = {};
-                localStorage.setItem(productsStorageKey, savedProducts);
-            }
-            else {
-                cartWidget.products = savedProducts;
+            if (savedProducts !== null) {
+                cartWidget.products = savedProducts
             }
         }
+
+        redraw();
     }
 
-    cartWidget.addProduct = function (product) {
-        var savedProduct = this.products[product];
+    cartWidget.addProduct = function (productName) {
+        var savedProduct = this.products[productName];
 
         if (savedProduct === null || savedProduct === undefined) {
-            this.products[product] = 1;
+            this.products[productName] = 1;
         }
         else {
-            this.products[product]++;
+            this.products[productName]++;
         }
+
+        this.setToStorage(productName, this.products[productName]);
+        redraw();
     }
 
-    cartWidget.removeProduct = function (product) {
-        var savedProduct = this.products[product];
+    cartWidget.removeProduct = function (productName) {
+        var savedProduct = this.products[productName];
 
-        if (savedProduct !== null && savedProduct !== undefined) {
-            if (savedProduct > 1) {
-                this.products[product]--;
-            }
-            else {
-                this.products[product] = null;
-            }
+        if (savedProduct === null || savedProduct === undefined || savedProduct === 0) {
+            return;
         }
+
+        this.products[productName]--;
+
+        if (this.products[productName] === 0) {
+            this.products[productName] = null;
+            this.removeFromStorage(productName);
+        }
+        else {
+            this.setToStorage(productName, this.products[productName]);
+        }
+
+        redraw();
     }
 
-    cartWidget.getProductCount = function (product) {
-        return this.products[product];
+    cartWidget.getProductCount = function (productName) {
+        return this.products[productName];
     }
 
-    cartWidget.saveToStorage = function (product, count) {
-        localStorage.setItem(product, count);
+    cartWidget.setToStorage = function (product, count) {
+        localStorage.setItem(productsStorageKey + '_' + product, count);
     }
 
     cartWidget.loadFromStorage = function (product) {
-
+        return localStorage.getItem(productsStorageKey + '_' + product);
     }
 
-    function redraw() {
-        this.elem
+    cartWidget.removeFromStorage = function (product) {
+        localStorage.removeItem(productsStorageKey + '_' + product);
     }
 
+    var redraw = function() {
+        var productsElem = cartWidget.elem.find('.products');
+        productsElem.empty();
+
+        for (var productName in cartWidget.products) {
+            if (cartWidget.products.hasOwnProperty(productName) &&
+                cartWidget.products[productName] !== null) {
+                var productElemContent = productName;
+
+                if (cartWidget.products[productName] > 1) {
+                    productElemContent += ' x' + cartWidget.products[productName];
+                }
+
+                var productElem = $('<div class="product">' + productElemContent + '</div>');
+
+                productsElem.append(productElem);
+            }
+        }
+    }
+
+    var getProductsFromLocalStorage = function () {
+        var products = {};
+
+        for (var key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                var value = localStorage[key];
+
+                if (key.indexOf(productsStorageKey) !== -1) {
+                    var productName = key.split('_')[1];
+                    products[productName] = value;
+                }
+            }
+        }
+
+        return products;
+    }
 })(cartWidget);
