@@ -28,18 +28,16 @@
             <div class="products-list">
                 <div class="product" data-th-each="product: ${products}">
                     <span class="product name">
-                        <a data-th-href="@{'/catalog/'}" data-th-text="${product.name}"></a>
+                        <a data-th-href="@{'/product/' + ${product.id}}" data-th-text="${product.name}"></a>
                     </span>
                     <img class="product image" data-th-src="@{'/images/' + ${product.imageUrl}}" alt="" />
-                    <div class="product description" data-th-text="${product.description}"></div>
                     <span class="product price" data-th-text="${product.price}"></span>
                     <div class="product buy-controls">
-                        <div class="wrapper">
-                            <button class="buy-control minus"
-                                    data-th-attr="product-name=@{${product.name}}">-</button>
+                        <div class="wrapper"
+                             data-th-attr="product-id=@{${product.id}},product-name=@{${product.name}},product-price=@{${product.price}}">
+                            <button class="buy-control minus">-</button>
                             <input class="buy-control text" type="text" />
-                            <button class="buy-control plus"
-                                    data-th-attr="product-name=@{${product.name}}">+</button>
+                            <button class="buy-control plus">+</button>
                         </div>
                     </div>
                 </div>

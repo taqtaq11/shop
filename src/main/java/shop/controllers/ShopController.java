@@ -20,9 +20,4 @@ public class ShopController {
     public String contacts() {
         return "contacts";
     }
-
-    @RequestMapping("/cart")
-    public String cart() {
-        return "cart";
-    }
 }

@@ -13,97 +13,110 @@ var cartWidget = {};
             var savedProducts = getProductsFromLocalStorage();
 
             if (savedProducts !== null) {
-                cartWidget.products = savedProducts
+                cartWidget.products = savedProducts;
+            }
+            else {
+                localStorage.setItem(productsStorageKey, JSON.stringify({}));
             }
         }
 
         redraw();
     }
 
-    cartWidget.addProduct = function (productName) {
-        var savedProduct = this.products[productName];
+    cartWidget.addProduct = function (product) {
+        var savedProduct = this.products[product.id];
 
         if (savedProduct === null || savedProduct === undefined) {
-            this.products[productName] = 1;
+            product.count = 1;
+            this.products[product.id] = product;
         }
         else {
-            this.products[productName]++;
+            this.products[product.id].count++;
         }
 
-        this.setToStorage(productName, this.products[productName]);
+        this.setToStorage(this.products[product.id]);
         redraw();
     }
 
-    cartWidget.removeProduct = function (productName) {
-        var savedProduct = this.products[productName];
+    cartWidget.removeProduct = function (productId) {
+        var savedProduct = this.products[productId];
 
-        if (savedProduct === null || savedProduct === undefined || savedProduct === 0) {
+        if (savedProduct === null || savedProduct === undefined) {
             return;
         }
 
-        this.products[productName]--;
+        savedProduct.count--;
 
-        if (this.products[productName] === 0) {
-            this.products[productName] = null;
-            this.removeFromStorage(productName);
+        if (savedProduct.count === 0) {
+            delete this.products[productId];
+            this.removeFromStorage(productId);
         }
         else {
-            this.setToStorage(productName, this.products[productName]);
+            this.setToStorage(savedProduct);
         }
 
         redraw();
     }
 
-    cartWidget.getProductCount = function (productName) {
-        return this.products[productName];
+    cartWidget.getProductCount = function (productId) {
+        var savedProduct = this.products[productId];
+
+        if (savedProduct === null || savedProduct === undefined) {
+            return 0;
+        }
+
+        return savedProduct.count;
     }
 
-    cartWidget.setToStorage = function (product, count) {
-        localStorage.setItem(productsStorageKey + '_' + product, count);
+    cartWidget.setToStorage = function (product) {
+        var products = $.parseJSON(localStorage.getItem(productsStorageKey));
+        products[product.id] = product;
+        localStorage.setItem(productsStorageKey, JSON.stringify(products));
     }
 
-    cartWidget.loadFromStorage = function (product) {
-        return localStorage.getItem(productsStorageKey + '_' + product);
+    cartWidget.loadFromStorage = function (productName) {
+        var products = $.parseJSON(localStorage.getItem(productsStorageKey));
+        return products[productName];
     }
 
-    cartWidget.removeFromStorage = function (product) {
-        localStorage.removeItem(productsStorageKey + '_' + product);
+    cartWidget.removeFromStorage = function (productId) {
+        var products = $.parseJSON(localStorage.getItem(productsStorageKey));
+        delete products[productId];
+        localStorage.setItem(productsStorageKey, JSON.stringify(products));
     }
 
     var redraw = function() {
         var productsElem = cartWidget.elem.find('.products');
         productsElem.empty();
 
-        for (var productName in cartWidget.products) {
-            if (cartWidget.products.hasOwnProperty(productName) &&
-                cartWidget.products[productName] !== null) {
-                var productElemContent = productName;
+        var totalPriceElem = cartWidget.elem.find('.total-price');
+        totalPriceElem.empty();
 
-                if (cartWidget.products[productName] > 1) {
-                    productElemContent += ' x' + cartWidget.products[productName];
-                }
+        var totalPrice = 0;
 
-                var productElem = $('<div class="product">' + productElemContent + '</div>');
+        for (var productId in cartWidget.products) {
+            if (cartWidget.products.hasOwnProperty(productId) && product !== null) {
+                var product = cartWidget.products[productId];
+                var currentPrice = product.price * product.count;
+
+                var productElem = $(
+                    '<tr>' +
+                        '<td><a href="/product/' + productId + '">' + product.name + '</a></td>' +
+                        '<td>' + product.count + '</td>' +
+                        '<td>' + currentPrice + '</td>' +
+                    '</tr>'
+                );
 
                 productsElem.append(productElem);
+
+                totalPrice += currentPrice;
             }
         }
+
+        totalPriceElem.append($('<span>Общая стоимость: ' + totalPrice + '</span>'));
     }
 
     var getProductsFromLocalStorage = function () {
-        var products = {};
-
-        for (var key in localStorage) {
-            if (localStorage.hasOwnProperty(key)) {
-                var value = localStorage[key];
-
-                if (key.indexOf(productsStorageKey) !== -1) {
-                    var productName = key.split('_')[1];
-                    products[productName] = value;
-                }
-            }
-        }
-
-        return products;
+        return $.parseJSON(localStorage.getItem(productsStorageKey));
     }
 })(cartWidget);

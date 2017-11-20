@@ -1,3 +1,10 @@
+.cart-widget {
+    position: fixed;
+    top: 0;
+    right: 40px;
+    width: 200px;
+}
+
 .cart-widget.hide {
     display: none;
 }

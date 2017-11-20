@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Shop | Product</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/menu.css" />
+    <link rel="stylesheet" href="/css/cart-widget.css" />
+</head>
+<body>
+<div class="main-wrapper">
+    <div data-th-include="fragments/header" data-th-remove="tag"></div>
+    <div data-th-include="fragments/menu" data-th-remove="tag"></div>
+    <div data-th-include="fragments/cart_widget" data-th-remove="tag"></div>
+
+    <div class="product-content">
+        <div class="product">
+            <img class="product image" data-th-src="@{'/images/' + ${product.imageUrl}}" alt="" />
+            <span class="product name" data-th-text="${product.name}"></span>
+            <div class="product description" data-th-text="${product.description}"></div>
+            <span class="product price" data-th-text="${product.price}"></span>
+            <div class="product buy-controls">
+                <div class="wrapper"
+                     data-th-attr="product-id=@{${product.id}},product-name=@{${product.name}},product-price=@{${product.price}}">
+                    <button class="buy-control minus">-</button>
+                    <input class="buy-control text" type="text" />
+                    <button class="buy-control plus">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-th-include="fragments/footer" data-th-remove="tag"></div>
+</div>
+
+<script src="/js/jquery-3.2.1.min.js" />
+<script src="/js/cart-widget.js" />
+<script src="/js/product.js" />
+</body>
+</html>

@@ -1,6 +1,7 @@
 package shop.model.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,9 +13,12 @@ public class Category {
 
     private String name;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Category> children = new ArrayList<Category>();
 
     public Category() {}
 
@@ -33,5 +37,9 @@ public class Category {
 
     public Category getParent() {
         return parent;
+    }
+
+    public List<Category> getChildren() {
+        return children;
     }
 }

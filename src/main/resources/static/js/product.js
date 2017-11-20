@@ -26,10 +26,7 @@
         buyControlInput.val(cartWidget.getProductCount(productName));
     }
 
-    var buyControls = $('.buy-control.text');
-    buyControls.each(function () {
-        var sender = $(this).parent();
-        var productId = sender.attr('product-id');
-        updateProductCount(sender, productId);
-    })
+    var buyControl = $('.buy-control.text').parent();
+    var productId = buyControl.attr('product-id');
+    updateProductCount(buyControl, productId);
 })();

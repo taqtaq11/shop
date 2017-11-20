@@ -61,11 +61,15 @@ public class CatalogController {
         }
 
         List<Category> categoriesPath = getCategoriesPath(currentCategory);
-        List<Category> subCategories = getSubCategories(currentCategory.getId());
-        List<Product> products = getProducts(currentCategory.getId(), pageNum);
+
+        List<Category> ancestors = new ArrayList<Category>();
+        ancestors.add(currentCategory);
+        getAncestors(currentCategory, ancestors);
+
+        List<Product> products = getProducts(ancestors, pageNum);
 
         model.addAttribute("categoriesPath", categoriesPath);
-        model.addAttribute("subCategories", subCategories);
+        model.addAttribute("subCategories", currentCategory.getChildren());
         model.addAttribute("products", products);
 
         return "catalog";
@@ -82,15 +86,23 @@ public class CatalogController {
         return categories;
     }
 
-    private List<Category> getSubCategories(int parentId) {
-        return categoriesRepository.findByParent_Id(parentId);
+    private void getAncestors(Category parent, List<Category> ancestors) {
+        List<Category> children = parent.getChildren();
+
+        if (children != null && children.size() > 0) {
+            ancestors.addAll(children);
+
+            for (Category child : children) {
+                getAncestors(child, ancestors);
+            }
+        }
     }
 
-    private List<Product> getProducts(int categoryId, int pageNum) {
+    private List<Product> getProducts(List<Category> categories, int pageNum) {
         Pageable pageable = createPagination(pageNum, Sort.Direction.ASC,
                 SORTING_COLUMN);
 
-        return productsRepository.findByCategory_Id(categoryId, pageable);
+        return productsRepository.findByCategoryIn(categories, pageable);
     }
 
     private Pageable createPagination(int pageNum,
