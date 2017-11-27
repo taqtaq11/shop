@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Shop | About</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/menu.css" />
+    <link rel="stylesheet" href="/css/cart-widget.css" />
+    <link rel="stylesheet" href="/css/about.css" />
+</head>
+<body class="main-wrapper">
+    <div data-th-include="fragments/header" data-th-remove="tag"></div>
+    <div data-th-include="fragments/menu :: menuDiv('about')" data-th-remove="tag"></div>
+    <div data-th-include="fragments/cart_widget" data-th-remove="tag"></div>
+
+    <div class="about-content">
+        <div class="map"></div>
+    </div>
+
+    <div data-th-include="fragments/footer" data-th-remove="tag"></div>
+
+    <script src="/js/jquery-3.2.1.min.js" />
+    <script src="/js/about.js"></script>
+    <script data-th-src="@{'https://maps.googleapis.com/maps/api/js?callback=initMap&amp;key=AIzaSyAxL6vVrw-zyk53EWWA0ABjPLtIONM-SsI'}"></script>
+</body>
+</html>

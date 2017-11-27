@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Shop | Cart</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/menu.css" />
+    <link rel="stylesheet" href="/css/buy.css" />
+</head>
+<body>
+<div class="main-wrapper">
+    <div data-th-include="fragments/header" data-th-remove="tag"></div>
+    <div data-th-include="fragments/menu :: menuDiv('cart')" data-th-remove="tag"></div>
+
+    <div class="cart-content">
+        <table class="products-table">
+            <tr>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Стоимость</th>
+            </tr>
+            <tr class="product" data-th-each="product: ${products}">
+                <td class="product name">
+                    <a data-th-href="@{'/product/' + ${product.id}}" data-th-text="${product.name}"></a>
+                </td>
+                <td class="product price" data-th-text="${product.price}"></td>
+                <td class="count" data-th-text="${counts.get(product.id)}"></td>
+                <td class="cost" data-th-text="${costs.get(product.id)}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="price" data-th-text="${totalCost}"></td>
+            </tr>
+        </table>
+
+        <div class="buy-wrapper">
+            <button class="buy">Купить</button>
+        </div>
+    </div>
+
+    <div data-th-include="fragments/footer" data-th-remove="tag"></div>
+</div>
+
+<script src="/js/jquery-3.2.1.min.js" />
+<script src="/js/jquery.cookie.js" />
+</body>
+</html>

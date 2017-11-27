@@ -22,6 +22,14 @@ public class Product {
     @JoinColumn(name = "category_id")
     Category category;
 
+    public Product() {}
+
+    public Product(Integer id, String name, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
     public Integer getId() {
         return id;
     }

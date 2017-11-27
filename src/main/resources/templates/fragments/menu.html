@@ -1,7 +1,19 @@
-<div class="menu">
-    <div class="menu-item"><a href="/">Главная</a></div>
-    <div class="menu-item"><a href="/catalog">Каталог</a></div>
-    <div class="menu-item"><a href="/cart">Корзина</a></div>
-    <div class="menu-item"><a href="/about">О нас</a></div>
-    <div class="menu-item"><a href="/contacts">Контакты</a></div>
+<div class="menu-wrapper" data-th-fragment="menuDiv(activeTab)">
+    <div class="menu">
+        <div class="menu-item" data-th-classappend="${activeTab == 'index'} ? active : ''">
+            <a href="/">Главная</a>
+        </div>
+        <div class="menu-item" data-th-classappend="${activeTab == 'catalog'} ? active : ''">
+            <a href="/catalog">Каталог</a>
+        </div>
+        <div class="menu-item" data-th-classappend="${activeTab == 'cart'} ? active : ''">
+            <a href="/cart">Корзина</a>
+        </div>
+        <div class="menu-item" data-th-classappend="${activeTab == 'about'} ? active : ''">
+            <a href="/about">О нас</a>
+        </div>
+        <div class="menu-item" data-th-classappend="${activeTab == 'contacts'} ? active : ''">
+            <a href="/contacts">Контакты</a>
+        </div>
+    </div>
 </div>

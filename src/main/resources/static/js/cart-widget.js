@@ -20,6 +20,7 @@ var cartWidget = {};
             }
         }
 
+        updateCookie();
         redraw();
     }
 
@@ -35,6 +36,7 @@ var cartWidget = {};
         }
 
         this.setToStorage(this.products[product.id]);
+        updateCookie();
         redraw();
     }
 
@@ -55,6 +57,7 @@ var cartWidget = {};
             this.setToStorage(savedProduct);
         }
 
+        updateCookie();
         redraw();
     }
 
@@ -114,6 +117,11 @@ var cartWidget = {};
         }
 
         totalPriceElem.append($('<span>Общая стоимость: ' + totalPrice + '</span>'));
+    }
+
+    var updateCookie = function() {
+        var products = localStorage.getItem(productsStorageKey);
+        $.cookie("products", products, { path: '/cart' });
     }
 
     var getProductsFromLocalStorage = function () {

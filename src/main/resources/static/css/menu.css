@@ -24,6 +24,10 @@
     background-color: #3F51B5;
 }
 
+.menu .menu-item.active a {
+    background-color: #8C9EFF;
+}
+
 .menu .menu-item a:hover {
     background-color: #8C9EFF;
     color: #3949AB;

@@ -1,0 +1,29 @@
+.cart-content .products-table {
+    border-collapse: collapse;
+    margin: 20px auto 0;
+}
+
+.cart-content .products-table .price {
+    text-align: right;
+}
+
+.cart-content .products-table .count {
+    text-align: center;
+}
+
+.cart-content .products-table .cost {
+    text-align: right;
+}
+
+.cart-content .products-table tr td {
+    padding: 10px;
+}
+
+.cart-content .products-table tr:nth-last-child(2) td {
+    border-bottom: 1px solid black;
+}
+
+.cart-content .buy-wrapper {
+    width: 100px;
+    margin: 0 auto;
+}
