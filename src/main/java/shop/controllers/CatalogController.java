@@ -14,6 +14,7 @@ import shop.model.entities.Product;
 import shop.model.repositories.CategoriesRepository;
 import shop.model.repositories.ProductsRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ import java.util.List;
 public class CatalogController {
 
     private static final int PRODUCTS_PER_PAGE_COUNT = 18;
-    private static final String SORTING_COLUMN = "name";
+    private static final String SORTING_COLUMN = "price";
+    private static final BigDecimal MAX_PRICE = new BigDecimal("999999999");
 
     private final CategoriesRepository categoriesRepository;
     private final ProductsRepository productsRepository;
@@ -44,6 +46,14 @@ public class CatalogController {
             Integer categoryId,
         @RequestParam(name = "page", required = false)
             Integer pageNum,
+        @RequestParam(name = "searchPhrase", required = false)
+            String searchPhrase,
+        @RequestParam(name = "sortDirection", required = false)
+            String sortDirection,
+        @RequestParam(name = "minPrice", required = false)
+            BigDecimal minPrice,
+        @RequestParam(name = "maxPrice", required = false)
+            BigDecimal maxPrice,
             Model model) {
 
         if (categoryId == null || categoryId < 1) {
@@ -52,6 +62,18 @@ public class CatalogController {
 
         if (pageNum == null) {
             pageNum = 0;
+        }
+
+        if (minPrice == null) {
+            minPrice = BigDecimal.ZERO;
+        }
+
+        if (maxPrice == null) {
+            maxPrice = MAX_PRICE;
+        }
+
+        if (sortDirection == null) {
+            sortDirection = "ASC";
         }
 
         Category currentCategory = categoriesRepository.findOne(categoryId);
@@ -66,7 +88,7 @@ public class CatalogController {
         ancestors.add(currentCategory);
         getAncestors(currentCategory, ancestors);
 
-        List<Product> products = getProducts(ancestors, pageNum);
+        List<Product> products = getProducts(ancestors, minPrice, maxPrice, searchPhrase, pageNum, sortDirection);
 
         model.addAttribute("categoriesPath", categoriesPath);
         model.addAttribute("subCategories", currentCategory.getChildren());
@@ -98,11 +120,22 @@ public class CatalogController {
         }
     }
 
-    private List<Product> getProducts(List<Category> categories, int pageNum) {
-        Pageable pageable = createPagination(pageNum, Sort.Direction.ASC,
-                SORTING_COLUMN);
+    private List<Product> getProducts(List<Category> categories,
+                                      BigDecimal minPrice,
+                                      BigDecimal maxPrice,
+                                      String searchPhrase,
+                                      int pageNum,
+                                      String sortDirection) {
+        Pageable pageable =
+                createPagination(pageNum, Sort.Direction.valueOf(sortDirection.toUpperCase()), SORTING_COLUMN);
 
-        return productsRepository.findByCategoryIn(categories, pageable);
+        if (searchPhrase == null) {
+            return productsRepository.findByCategoryInAndPriceBetween(
+                    categories, minPrice, maxPrice, pageable);
+        }
+
+        return productsRepository.findByCategoryInAndPriceBetweenAndNameContaining(
+                categories, minPrice, maxPrice, searchPhrase, pageable);
     }
 
     private Pageable createPagination(int pageNum,

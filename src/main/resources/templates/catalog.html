@@ -13,6 +13,7 @@
         <div data-th-include="fragments/header" data-th-remove="tag"></div>
         <div data-th-include="fragments/menu :: menuDiv('catalog')" data-th-remove="tag"></div>
         <div data-th-include="fragments/cart_widget" data-th-remove="tag"></div>
+        <div data-th-include="fragments/search_widget" data-th-remove="tag"></div>
 
         <div class="catalog-content">
             <div class="categories-nav">
@@ -44,12 +45,13 @@
             </div>
         </div>
 
-        <div data-th-include="fragments/menu :: menuDiv('catalog')" data-th-remove="tag"></div>
+        <div data-th-include="fragments/footer" data-th-remove="tag"></div>
     </div>
 
     <script src="/js/jquery-3.2.1.min.js" />
     <script src="/js/jquery.cookie.js" />
     <script src="/js/cart-widget.js" />
+    <script src="/js/search-widget.js" />
     <script src="/js/catalog.js" />
 </body>
 </html>
