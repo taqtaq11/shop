@@ -1,0 +1,53 @@
+@startuml
+autonumber
+
+activate Client
+activate Router
+activate CatalogController
+activate CatalogService
+activate CategoriesRepository
+activate ProductsRepository
+
+Client -> Router : products catalog
+Router -> CatalogController : display()
+CatalogController -> CatalogService : getCategory(id)
+CatalogService -> CategoriesRepository : findByParent_Id(id)
+CatalogService <-- CategoriesRepository : Category object
+CatalogController <-- CatalogService : Category object
+CatalogController -> CatalogService : getCategoriesHierarchy(category)
+CatalogController <-- CatalogService : categories hierarchy
+CatalogController -> CatalogService : getProducts(...)
+CatalogService -> ProductsRepository : getProductsByCategory(...)
+CatalogService <-- ProductsRepository : products list
+CatalogController <-- CatalogService : products list
+CatalogController -> CatalogController : create view model
+Router <-- CatalogController : view model
+Client <-- Router : catalog view
+
+@enduml
+
+@startuml
+autonumber
+
+activate Client
+activate Router
+activate CartController
+activate CartService
+
+Client -> Router : add to cart
+Router -> CartController : addToCart(productId)
+CartController -> CartService : addToCart(productId)
+CartController <-- CartService : product added
+Router <-- CartController : product added
+Client <-- Router : update cart widget
+
+... Other user activities ...
+
+Client -> Router : to cart
+Router -> CartController : cart()
+CartController -> CartService : getProducts()
+CartController <-- CartService : products list
+Router <-- CartController : create cart view model
+Client <-- Router : cart view
+
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+
+class Program <<Entry point>> {
+    {static} void main()
+}
+
+package Controllers {
+    class IndexController {
+
+    }
+
+    class CatalogController {
+        String redirect()
+        String display(Integer categoryId, Integer pageNum, String searchPhrase, String sortDirection, BigDecimal minPrice, BigDecimal maxPrice, Model model)
+    }
+
+    class ProductController {
+
+    }
+
+    class CartController {
+
+    }
+
+    class AboutController {
+
+    }
+
+    class ContactsController {
+
+    }
+}
+
+package Model.Entities {
+
+}
+
+package Model.Repositories {
+    interface CategoriesRepository {
+        List<Category> findByParent_Id(int parent_id);
+    }
+}
+
+package Spring #DDD {
+    interface CrudRepository
+}
+
+CategoriesRepository --|> CrudRepository
+
+@enduml
